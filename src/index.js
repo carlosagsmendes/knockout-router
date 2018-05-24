@@ -7,9 +7,6 @@ import {
 import { componentPlugin } from '@profiscience/knockout-contrib-router-plugins-component';
 import 'regenerator-runtime/runtime';
 
-// import TasksViewModel from './tasks/tasks-viewmodel';
-// import TasksTemplate from './tasks/tasks-template.html';
-
 Router.use(loadingMiddleware);
 Route.usePlugin(componentPlugin);
 class MyComponentViewModel {
@@ -78,53 +75,36 @@ ko.components.register('bar', { template: createOuterTemplate('bar') });
 ko.components.register('baz', { template: createInnerTemplate('baz') });
 ko.components.register('qux', { template: createInnerTemplate('qux') });
 
-// Router.useRoutes({
-//   '/': 'my-component',
-//   '/foo': [
-//     'foo',
-//     {
-//       '/': 'empty',
-//       '/baz': 'baz',
-//       '/qux': 'qux'
-//     }
-//   ],
-//   '/bar': [
-//     'bar',
-//     {
-//       '/': 'empty',
-//       '/baz': 'baz',
-//       '/qux': 'qux'
-//     }
-//   ]
-//   //   '/tasks': [
-//   //     'tasks',
-//   //     {
-//   //       '/': 'empty',
-//   //       '/task': 'task'
-//   //     }
-//   //   ]
-// });
+Router.useRoutes({
+  '/foo': [
+    'foo',
+    {
+      '/': 'empty',
+      '/baz': 'baz',
+      '/qux': 'qux'
+    }
+  ],
+  '/bar': [
+    'bar',
+    {
+      '/': 'empty',
+      '/baz': 'baz',
+      '/qux': 'qux'
+    }
+  ]
+});
 
 Router.useRoutes([
   new Route('/', 'my-component'),
   new Route(
     '/tasks',
     {
-      component: () => import('./tasks/tasks-viewmodel') 
-      
-    //   ({
-    //     template: import('./tasks/tasks-template.html'),
-    //     viewModel: import('./tasks/tasks-viewmodel')
-    //   })
+      component: () => import('./tasks/tasks-viewmodel')
     },
     [
       new Route('/', 'empty'),
       new Route('/task', {
         component: () => import('./tasks/task-viewmodel')
-        //  ({
-        //   template: import('./tasks/task-template.html'),
-        //   viewModel: import('./tasks/task-viewmodel')
-        // })
       })
     ]
   )
