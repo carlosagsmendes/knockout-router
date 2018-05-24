@@ -1,34 +1,33 @@
 import ko from 'knockout';
 import { Router } from '@profiscience/knockout-contrib-router';
-//import { initializerPlugin, INITIALIZED } from '@profiscience/knockout-contrib-router-plugins-init'
-//import "regenerator-runtime/runtime";
+import {
+  initializerPlugin,
+  INITIALIZED
+} from '@profiscience/knockout-contrib-router-plugins-init';
+import 'regenerator-runtime/runtime';
 
 import TasksViewModel from './tasks/tasks-viewmodel';
 import TasksTemplate from './tasks/tasks-template.html';
 
-
-
-Router.use(loadingMiddleware);
+Router.use(loadingMiddleware).use(initializerPlugin);
 
 class MyComponentViewModel {
   constructor() {
-    console.log("constructor");
     this.isInitialized = ko.observable(false);
-    // this[INITIALIZED] = this.init()
-    // this.init = this.init.bind(this);
+    this[INITIALIZED] = this.init();
+    this.init = this.init.bind(this);
   }
 
-  // async init() { 
-  //   this.isInitialized(true);
-  // }
+  async init() {
+    this.isInitialized(true);
+    console.log('constructor werwerwer');
+  }
 }
 
 ko.components.register('my-component', {
   viewModel: MyComponentViewModel,
   template: `<span data-bind="text: isInitialized"></span>`
 });
-
-
 
 function createOuterTemplate(foo) {
   return `
@@ -94,32 +93,30 @@ Router.useRoutes({
     }
   ],
   '/tasks': 'tasks'
-  
 });
 ko.components.register('tasks', {
   viewModel: TasksViewModel,
-  template: TasksTemplate 
-//   `
-//   <div class='liveExample'>
+  template: TasksTemplate,
+  //   `
+  //   <div class='liveExample'>
 
-// 	<form data-bind="submit: addItem">
-// 		Add item: <input type="text" data-bind='value:itemToAdd, valueUpdate: "afterkeydown"' />
-// 		<button type="submit" data-bind="enable: itemToAdd().length > 0">Add</button>
-// 	</form>
+  // 	<form data-bind="submit: addItem">
+  // 		Add item: <input type="text" data-bind='value:itemToAdd, valueUpdate: "afterkeydown"' />
+  // 		<button type="submit" data-bind="enable: itemToAdd().length > 0">Add</button>
+  // 	</form>
 
-// 	<p>Your values:</p>
-// 	<select multiple="multiple" height="5" data-bind="options:allItems, selectedOptions:selectedItems"> </select>
+  // 	<p>Your values:</p>
+  // 	<select multiple="multiple" height="5" data-bind="options:allItems, selectedOptions:selectedItems"> </select>
 
-// 	<div>
-// 		<button data-bind="click: removeSelected, enable: selectedItems().length > 0">Remove</button>
-// 		<button data-bind="click: sortItems, enable: allItems().length > 1">Sort</button>
-// 	</div>
+  // 	<div>
+  // 		<button data-bind="click: removeSelected, enable: selectedItems().length > 0">Remove</button>
+  // 		<button data-bind="click: sortItems, enable: allItems().length > 1">Sort</button>
+  // 	</div>
 
-// </div>
-//   `
-  ,
+  // </div>
+  //   `
   synchronous: true
-})
+});
 
 function loadingMiddleware(ctx) {
   return {
@@ -140,7 +137,5 @@ function loadingMiddleware(ctx) {
     }
   };
 }
-
-
 
 ko.applyBindings({});
