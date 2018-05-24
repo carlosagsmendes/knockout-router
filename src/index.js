@@ -1,16 +1,17 @@
 import ko from 'knockout';
-import { Router } from '@profiscience/knockout-contrib-router';
+import { Router, Route } from '@profiscience/knockout-contrib-router';
 import {
   initializerPlugin,
   INITIALIZED
 } from '@profiscience/knockout-contrib-router-plugins-init';
+import { componentPlugin } from '@profiscience/knockout-contrib-router-plugins-component';
 import 'regenerator-runtime/runtime';
 
-import TasksViewModel from './tasks/tasks-viewmodel';
-import TasksTemplate from './tasks/tasks-template.html';
+// import TasksViewModel from './tasks/tasks-viewmodel';
+// import TasksTemplate from './tasks/tasks-template.html';
 
-Router.use(loadingMiddleware).use(initializerPlugin);
-
+Router.use(loadingMiddleware);
+Route.usePlugin(componentPlugin);
 class MyComponentViewModel {
   constructor() {
     this.isInitialized = ko.observable(false);
@@ -67,56 +68,56 @@ function createInnerTemplate(foo) {
   `;
 }
 
-ko.components.register('empty', { template: '<span></span>' });
+ko.components.register('empty', {
+  template: `<span>empty template</span>`
+});
+ko.components.register('task', { template: '<span>TASK</span>' });
 
 ko.components.register('foo', { template: createOuterTemplate('foo') });
 ko.components.register('bar', { template: createOuterTemplate('bar') });
 ko.components.register('baz', { template: createInnerTemplate('baz') });
 ko.components.register('qux', { template: createInnerTemplate('qux') });
 
-Router.useRoutes({
-  '/': 'my-component',
-  '/foo': [
-    'foo',
+// Router.useRoutes({
+//   '/': 'my-component',
+//   '/foo': [
+//     'foo',
+//     {
+//       '/': 'empty',
+//       '/baz': 'baz',
+//       '/qux': 'qux'
+//     }
+//   ],
+//   '/bar': [
+//     'bar',
+//     {
+//       '/': 'empty',
+//       '/baz': 'baz',
+//       '/qux': 'qux'
+//     }
+//   ]
+//   //   '/tasks': [
+//   //     'tasks',
+//   //     {
+//   //       '/': 'empty',
+//   //       '/task': 'task'
+//   //     }
+//   //   ]
+// });
+
+Router.useRoutes([
+  new Route('/', 'my-component'),
+  new Route(
+    '/tasks',
     {
-      '/': 'empty',
-      '/baz': 'baz',
-      '/qux': 'qux'
-    }
-  ],
-  '/bar': [
-    'bar',
-    {
-      '/': 'empty',
-      '/baz': 'baz',
-      '/qux': 'qux'
-    }
-  ],
-  '/tasks': 'tasks'
-});
-ko.components.register('tasks', {
-  viewModel: TasksViewModel,
-  template: TasksTemplate,
-  //   `
-  //   <div class='liveExample'>
-
-  // 	<form data-bind="submit: addItem">
-  // 		Add item: <input type="text" data-bind='value:itemToAdd, valueUpdate: "afterkeydown"' />
-  // 		<button type="submit" data-bind="enable: itemToAdd().length > 0">Add</button>
-  // 	</form>
-
-  // 	<p>Your values:</p>
-  // 	<select multiple="multiple" height="5" data-bind="options:allItems, selectedOptions:selectedItems"> </select>
-
-  // 	<div>
-  // 		<button data-bind="click: removeSelected, enable: selectedItems().length > 0">Remove</button>
-  // 		<button data-bind="click: sortItems, enable: allItems().length > 1">Sort</button>
-  // 	</div>
-
-  // </div>
-  //   `
-  synchronous: true
-});
+      component: () => ({
+        template: import('./tasks/tasks-template.html'),
+        viewModel: import('./tasks/tasks-viewmodel')
+      })
+    },
+    [new Route('/', 'empty'), new Route('/task', 'task')]
+  )
+]);
 
 function loadingMiddleware(ctx) {
   return {
