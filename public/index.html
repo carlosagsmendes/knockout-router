@@ -3,11 +3,58 @@
 
 <head>
   <title>Knockout Router App</title>
+  <style>
+    router {
+      display: block;
+      border: 1px solid red;
+      padding: 10px;
+      margin: 10px;
+    }
+
+    body {
+      font-family: arial;
+      font-size: 14px;
+    }
+
+    .liveExample {
+      padding: 1em;
+      background-color: #EEEEDD;
+      border: 1px solid #CCC;
+      max-width: 655px;
+    }
+
+    .liveExample input {
+      font-family: Arial;
+    }
+
+    .liveExample b {
+      font-weight: bold;
+    }
+
+    .liveExample p {
+      margin-top: 0.9em;
+      margin-bottom: 0.9em;
+    }
+
+    .liveExample select[multiple] {
+      width: 100%;
+      height: 8em;
+    }
+
+    .liveExample h2 {
+      margin-top: 0.4em;
+    }
+  </style>
 </head>
 
 <body>
-  HOME
-  <div id="root"></div>
+  These paths exist outside any router, so '/' is good
+  <br>
+  <a data-bind="path: '/foo'">/foo</a>
+  <a data-bind="path: '/bar'">/bar</a>
+  <a data-bind="path: '/tasks'">TASKS</a>
+
+  <router></router>
 </body>
 
 </html>
