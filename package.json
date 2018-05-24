@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "@profiscience/knockout-contrib-router": "^2.0.0-7",
+    "@profiscience/knockout-contrib-router-plugins-component": "^1.0.2",
+    "@profiscience/knockout-contrib-router-plugins-init": "^1.0.2",
+    "jquery": "^3.3.1",
+    "knockout": "3.5.0-rc",
     "react-scripts": "1.1.4"
   },
   "scripts": {
