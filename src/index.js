@@ -110,12 +110,23 @@ Router.useRoutes([
   new Route(
     '/tasks',
     {
-      component: () => ({
-        template: import('./tasks/tasks-template.html'),
-        viewModel: import('./tasks/tasks-viewmodel')
-      })
+      component: () => import('./tasks/tasks-viewmodel') 
+      
+    //   ({
+    //     template: import('./tasks/tasks-template.html'),
+    //     viewModel: import('./tasks/tasks-viewmodel')
+    //   })
     },
-    [new Route('/', 'empty'), new Route('/task', 'task')]
+    [
+      new Route('/', 'empty'),
+      new Route('/task', {
+        component: () => import('./tasks/task-viewmodel')
+        //  ({
+        //   template: import('./tasks/task-template.html'),
+        //   viewModel: import('./tasks/task-viewmodel')
+        // })
+      })
+    ]
   )
 ]);
 
