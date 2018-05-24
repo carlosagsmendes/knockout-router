@@ -29,7 +29,7 @@ ko.components.register('my-component', {
 
 function createOuterTemplate(foo) {
   return `
-    <h1>${foo}</h1>
+    <h1>${foo} <span data-bind="text: new Date().getMilliseconds()">TASK</span></h1>
 <span data-bind="text: new Date().getMilliseconds()"></span>
     These begin with '/', so they route using the current (containing) router
     <br>
@@ -56,7 +56,7 @@ function createOuterTemplate(foo) {
 
 function createInnerTemplate(foo) {
   return `
-    <h2>${foo} INNER</h2>
+    <h2>${foo} INNER <span data-bind="text: new Date().getMilliseconds()">TASK</span></h2>
 
     These begin with '/', so they route using the current (containing) router
     <br>
