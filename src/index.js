@@ -7,6 +7,8 @@ import {
 import { componentPlugin } from '@profiscience/knockout-contrib-router-plugins-component';
 import 'regenerator-runtime/runtime';
 
+window.ko = ko;
+
 Router.use(loadingMiddleware);
 Route.usePlugin(componentPlugin);
 class MyComponentViewModel {
@@ -48,6 +50,7 @@ function createOuterTemplate(foo) {
 
     This begins with '//', so it is routed using the root router
     <br>
+    <pre data-bind="text: console.dir($data)"></pre>
     <a data-bind="path: '//${foo}/baz'">//${foo}/baz</a>
     <a data-bind="path: '//${foo}/qux'">//${foo}/qux</a>    
     <router></router>
@@ -62,6 +65,7 @@ function createInnerTemplate(foo) {
     <br>
     <a data-bind="path: './baz'">/baz</a>
     <a data-bind="path: './qux'">/qux</a>
+    <pre data-bind="text: console.dir($data)"></pre>
   `;
 }
 
