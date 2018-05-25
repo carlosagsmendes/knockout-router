@@ -2,7 +2,7 @@
 
     <form data-bind="submit: addItem">
         Add task:
-        <input type="text" data-bind='value:itemToAdd().title, valueUpdate: "afterkeydown"' />
+        <input type="text" data-bind='value:itemToAdd().title, valueUpdate: "afterkeydown", enterKey:"addItem"' />
         <button type="submit" data-bind="enable: itemToAdd().title().length > 0">Add</button>
     </form>
 

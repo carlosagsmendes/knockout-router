@@ -7,7 +7,9 @@ import {
 import { componentPlugin } from '@profiscience/knockout-contrib-router-plugins-component';
 import 'regenerator-runtime/runtime';
 
+//Attach to window to enable Knockout Context Debugger
 window.ko = ko;
+ko.options.deferUpdates = true;
 
 Router.use(loadingMiddleware);
 Route.usePlugin(componentPlugin);
@@ -117,6 +119,8 @@ Router.useRoutes([
 function loadingMiddleware(ctx) {
   return {
     beforeRender(/* done */) {
+      console.log('beforeRender');
+      ctx.observablePathName = ko.observable(ctx.path);
       //console.log('[router] navigating to', ctx.pathname);
     },
     afterRender() {

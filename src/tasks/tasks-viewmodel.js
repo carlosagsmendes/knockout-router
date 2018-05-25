@@ -1,6 +1,7 @@
 import ko from 'knockout';
 import Template from './tasks-template.html';
 import Task from './task-model';
+import '../bindings/enterkey';
 
 
 class TasksViewModel {
