@@ -107,7 +107,7 @@ Router.useRoutes([
     },
     [
       new Route('/', 'empty'),
-      new Route('/task', {
+      new Route('/task/:id', {
         component: () => import('./tasks/task-viewmodel')
       })
     ]

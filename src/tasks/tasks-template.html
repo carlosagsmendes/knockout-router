@@ -1,18 +1,18 @@
 <div class='liveExample'>
 
     <form data-bind="submit: addItem">
-        Add item:
-        <input type="text" data-bind='value:itemToAdd, valueUpdate: "afterkeydown"' />
-        <button type="submit" data-bind="enable: itemToAdd().length > 0">Add</button>
+        Add task:
+        <input type="text" data-bind='value:itemToAdd().title, valueUpdate: "afterkeydown"' />
+        <button type="submit" data-bind="enable: itemToAdd().title().length > 0">Add</button>
     </form>
 
-    <p>Your values:</p>
-    <select multiple="multiple" height="5" data-bind="options:allItems, selectedOptions:selectedItems"> </select>
-
-    <div>
-        <button data-bind="click: removeSelected, enable: selectedItems().length > 0">Remove</button>
-        <button data-bind="click: sortItems, enable: allItems().length > 1">Sort</button>
-    </div>
-    <a data-bind="path: './task'">Show me the... task</a>
+    <h4>Tasks</h4>
+    <ul data-bind="foreach: allItems">
+        <li>
+            <span data-bind="text: title"> </span>:
+            <span data-bind="text: name"> </span>
+            <a data-bind="path: './task/' + id">Edit details</a> | <a href="#" data-bind="click: $parent.remove">Remove</a>
+        </li>
+    </ul>
     <router></router>
 </div>

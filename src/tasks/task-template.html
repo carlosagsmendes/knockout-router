@@ -1,1 +1,11 @@
 <span data-bind="text: new Date().getMilliseconds()">TASK</span>
+<h2 data-bind="text: selectedTask.title"></h2>
+<form data-bind="submit: saveTask">
+    Edit task details:
+    <p>Description</p>
+    <input type="text" data-bind='value:selectedTask.description, valueUpdate: "afterkeydown"' />
+    <p>Assigned to:</p>
+    <input type="text" data-bind='value:selectedTask.user, valueUpdate: "afterkeydown"' />
+    <p></p>
+    <button type="submit">Save</button>
+</form>
