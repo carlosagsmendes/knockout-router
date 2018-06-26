@@ -1,4 +1,10 @@
 import ko from 'knockout';
+import {
+  initializerPlugin,
+  INITIALIZED
+} from '@profiscience/knockout-contrib-router-plugins-init';
+import 'regenerator-runtime/runtime';
+
 import Template from './tasks-template.html';
 import Task from './task-model';
 import '../bindings/enterkey';
@@ -6,6 +12,7 @@ import '../bindings/enterkey';
 
 class TasksViewModel {
   constructor(ctx) {
+    debugger;
     this.idGenerator = 3; 
     this.itemToAdd = ko.observable(new Task(this.idGenerator++, ''));
     this.allItems = ko.observableArray([
@@ -19,6 +26,14 @@ class TasksViewModel {
     //adding the tasks to the context so we can use them in the child routes
     ctx.tasks = this.allItems;
     ctx.saveTask = this.saveTask;
+    this.init = this.init.bind(this);
+    this.data = ctx.data;
+    this[INITIALIZED] = this.init();
+  }
+
+  async init() {
+    debugger;
+    console.log('init viewmodel');
   }
 
   saveTask = (item) => {

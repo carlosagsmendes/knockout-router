@@ -1,4 +1,6 @@
 import ko from 'knockout';
+import $ from 'jquery';
+
 import { Router, Route } from '@profiscience/knockout-contrib-router';
 import {
   initializerPlugin,
@@ -13,23 +15,7 @@ ko.options.deferUpdates = true;
 
 Router.use(loadingMiddleware);
 Route.usePlugin(componentPlugin);
-class MyComponentViewModel {
-  constructor() {
-    this.isInitialized = ko.observable(false);
-    this[INITIALIZED] = this.init();
-    this.init = this.init.bind(this);
-  }
-
-  async init() {
-    this.isInitialized(true);
-    console.log('constructor werwerwer');
-  }
-}
-
-ko.components.register('my-component', {
-  viewModel: MyComponentViewModel,
-  template: `<span data-bind="text: isInitialized"></span>`
-});
+Route.usePlugin(initializerPlugin);
 
 function createOuterTemplate(foo) {
   return `
@@ -67,8 +53,11 @@ function createInnerTemplate(foo) {
     <br>
     <a data-bind="path: './baz'">/baz</a>
     <a data-bind="path: './qux'">/qux</a>
-    <pre data-bind="text: console.dir($data)"></pre>
   `;
+}
+
+class BazViewModel {
+  constructor(ctx) {}
 }
 
 ko.components.register('empty', {
@@ -76,20 +65,23 @@ ko.components.register('empty', {
 });
 ko.components.register('task', { template: '<span>TASK</span>' });
 
-ko.components.register('foo', { template: createOuterTemplate('foo') });
+//ko.components.register('foo', { template: createOuterTemplate('foo') });
 ko.components.register('bar', { template: createOuterTemplate('bar') });
-ko.components.register('baz', { template: createInnerTemplate('baz') });
+ko.components.register('baz', {
+  template: createInnerTemplate('baz'),
+  viewModel: BazViewModel
+});
 ko.components.register('qux', { template: createInnerTemplate('qux') });
 
 Router.useRoutes({
-  '/foo': [
-    'foo',
-    {
-      '/': 'empty',
-      '/baz': 'baz',
-      '/qux': 'qux'
-    }
-  ],
+  // '/foo': [
+  //   'foo',
+  //   {
+  //     '/': 'empty',
+  //     '/baz': 'baz',
+  //     '/qux': 'qux'
+  //   }
+  // ],
   '/bar': [
     'bar',
     {
@@ -101,11 +93,64 @@ Router.useRoutes({
 });
 
 Router.useRoutes([
-  new Route('/', 'my-component'),
+  new Route('/', {
+    component: () => ({
+      template: import('./components/my-component/my-component-template.html'),
+      viewModel: import('./components/my-component/my-component-viewmodel'),
+      synchronous: true
+    })
+  }),
+  new Route(
+    '/foo',
+    {
+      component: () => ({
+        template: import('./components/foo-bar-baz/foo-bar-baz-outer-template.html'),
+        viewModel: import('./components/foo-bar-baz/foo-bar-baz-viewmodel'),
+        synchronous: true
+      })
+    },
+    [
+      new Route('/', 'empty'),
+      new Route('/baz', {
+        component: () => ({
+          template: import('./components/foo-bar-baz/foo-bar-baz-inner-template.html'),
+          viewModel: import('./components/foo-bar-baz/foo-bar-baz-viewmodel'),
+          synchronous: true
+        })
+      }),
+      new Route('/qux', {
+        component: () => ({
+          template: import('./components/foo-bar-baz/foo-bar-baz-inner-template.html'),
+          viewModel: import('./components/foo-bar-baz/foo-bar-baz-viewmodel'),
+          synchronous: true
+        })
+      })
+    ]
+  ),
+  new Route('/initplugin', {
+    component: () => ({
+      template: import('./components/init-plugin/init-plugin-template.html'),
+      viewModel: import('./components/init-plugin/init-plugin-viewmodel'),
+      synchronous: true
+    })
+  }),
+  new Route('/initpluginwithmiddleware', [
+    loadTasks,
+    {
+      component: () => ({
+        template: import('./components/init-plugin/init-plugin-template.html'),
+        viewModel: import('./components/init-plugin/init-plugin-viewmodel'),
+        synchronous: true
+      })
+    }
+  ]),
   new Route(
     '/tasks',
     {
-      component: () => import('./tasks/tasks-viewmodel')
+      component: ctx => {
+        console.log('after loadTasks');
+        return import('./tasks/tasks-viewmodel');
+      }
     },
     [
       new Route('/', 'empty'),
@@ -121,7 +166,6 @@ function loadingMiddleware(ctx) {
     beforeRender(/* done */) {
       console.log('beforeRender');
       ctx.observablePathName = ko.observable(ctx.path);
-      //console.log('[router] navigating to', ctx.pathname);
     },
     afterRender() {
       console.log(
@@ -137,5 +181,37 @@ function loadingMiddleware(ctx) {
     }
   };
 }
+
+// function loadTasks(ctx) {
+//   // return promise for async middleware
+
+//   return import('./api/tasks-data.json').then(tasks => {
+//     setTimeout(() => {
+//       ctx.data = {};
+//       ctx.data.tasks = tasks;
+//       console.log('tasks loaded!!!')
+//     }, 1000);
+//   });
+// }
+
+function loadTasks(ctx) {
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve({
+        myTask: 1
+      });
+    }, 1000);
+  });
+  promise.then(task => (ctx.task = task));
+
+  //return promise;
+}
+
+// function loadTask(ctx) {
+//   // if not passed in via `with` from Users.navigateToUser
+//   if (!ctx.user) {
+//     return $.get('/api/users/' + ctx.params.id).then((u) => ctx.user = u)
+//   }
+// }
 
 ko.applyBindings({});

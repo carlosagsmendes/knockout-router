@@ -1,0 +1,20 @@
+<h1>
+    <div data-bind="text: templateFor"></div>
+    <span data-bind="text: new Date().getMilliseconds()"></span>
+</h1>
+These begin with '/', so they route using the current (containing) router
+<br>
+<a data-bind="path: '/foo'">/foo</a>
+<a data-bind="path: '/bar'">/bar</a>
+
+<br>
+<br> This begins with './', so it is routed using the child (adjacent) router
+<br>
+<a data-bind="path: './baz'">./baz</a>
+<a data-bind="path: './qux'">./qux</a>
+<br>
+<br> This begins with '//', so it is routed using the root router
+<br>
+<a data-bind="path: '/' + templateFor() + '/baz'">//${foo}/baz</a>
+<a data-bind="path: '/' + templateFor() + '/qux'">//${foo}/qux</a>
+<router></router>

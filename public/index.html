@@ -48,8 +48,9 @@
 </head>
 
 <body>
-  These paths exist outside any router, so '/' is good
-  <br>
+  <a data-bind="path: '/'">Simple component</a>
+  <a data-bind="path: '/initplugin'">Init Plugin</a>
+  <a data-bind="path: '/initpluginwithmiddleware'">Init Plugin + Middleware</a>
   <a data-bind="path: '/foo'">/foo</a>
   <a data-bind="path: '/bar'">/bar</a>
   <a data-bind="path: '/tasks'">TASKS</a>

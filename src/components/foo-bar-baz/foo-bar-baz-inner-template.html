@@ -1,0 +1,9 @@
+<h2>
+    <div data-bind="text: templateFor"></div> 
+    <span data-bind="text: new Date().getMilliseconds()"></span>
+</h2>
+
+These begin with '/', so they route using the current (containing) router
+<br>
+<a data-bind="path: './baz'">/baz</a>
+<a data-bind="path: './qux'">/qux</a>
