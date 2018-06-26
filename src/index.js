@@ -15,7 +15,7 @@ ko.options.deferUpdates = true;
 
 Router.use(loadingMiddleware);
 Route.usePlugin(componentPlugin);
-Route.usePlugin(initializerPlugin);
+// Route.usePlugin(initializerPlugin);
 
 function createOuterTemplate(foo) {
   return `
